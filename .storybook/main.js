@@ -1,3 +1,7 @@
+import { mergeConfig } from 'vite';
+import tailwindcss from '@tailwindcss/postcss';
+import autoprefixer from 'autoprefixer';
+
 /** @type { import('@storybook/react-vite').StorybookConfig } */
 const config = {
   stories: ['../stories/**/*.stories.@(js|jsx|ts|tsx|mdx)'],
@@ -20,6 +24,18 @@ const config = {
       shouldExtractLiteralValuesFromEnum: true,
       propFilter: (prop) => (prop.parent ? !/node_modules/.test(prop.parent.fileName) : true),
     },
+  },
+  async viteFinal(config) {
+    return mergeConfig(config, {
+      css: {
+        postcss: {
+          plugins: [
+            tailwindcss(),
+            autoprefixer(),
+          ],
+        },
+      },
+    });
   },
 };
 
